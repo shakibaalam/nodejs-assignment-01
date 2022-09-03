@@ -35,25 +35,32 @@ module.exports.getAllUsers = (req, res) => {
 module.exports.postAUser = (req, res) => {
     const { id, gender, name, contact, address, photoUrl } = req.body
     // console.log(req.body);
-    if (id, gender, name, contact, address, photoUrl) {
-        users.push(req.body)
+    if (gender, name, contact, address, photoUrl) {
+        const newData = {
+            id: req.body.id || users.length + 1,
+            gender: req.body.gender,
+            name: req.body.name,
+            contact: req.body.contact,
+            address: req.body.address,
+            photoUrl: req.body.photoUrl
+        }
+        users.push(newData)
         res.send(users)
     }
     else {
-        res.send('Give all the properties like : id, gender, name, contact, address, photoUrl')
+        res.send('Give all the properties like : gender, name, contact, address, photoUrl')
     }
 }
 
 //Get a random user
 module.exports.getAUser = (req, res) => {
-    const { id } = req.params;
-    const foundUser = users.find(u => u.id === Number(id))
-    if (foundUser) {
-        res.send(foundUser)
+    function generateRandomInteger(max) {
+        return Math.floor(Math.random() * max) + 1;
     }
-    else {
-        res.send("user id doesn't exist")
-    }
+
+    let value = generateRandomInteger(3);
+    const foundUser = users.find(u => u.id === value)
+    res.send(foundUser)
 }
 
 //Update a user's information
@@ -76,8 +83,37 @@ module.exports.updateAUser = (req, res) => {
     }
 }
 
+//Update multiple user's information
+module.exports.updateMultiUser = (req, res) => {
+    const { id } = req.query;
+    console.log([id], [id].length);
+    let newData = users.find(u => u.id === Number(id))
+    // if (newData) {
+    //     newData = {
+    //         id: req.body.id || id,
+    //         gender: req.body.gender || newData.gender,
+    //         name: req.body.name || newData.name,
+    //         contact: req.body.contact || newData.contact,
+    //         address: req.body.address || newData.address,
+    //         photoUrl: req.body.photoUrl || newData.photoUrl
+    //     }
+    //     res.send(newData)
+    // }
+    // else {
+    //     res.send("user id doesn't exist")
+    // }
+}
+
+//delete a user
 module.exports.deleteAUser = (req, res) => {
     const { id } = req.params;
-    users = users.filter(u => u.id !== Number(id))
-    res.send(users)
+    const numberId = Number(id)
+    const userId = users.find(u => u.id === numberId)
+    if (numberId && userId) {
+        users = users.filter(u => u.id !== numberId)
+        res.send(users)
+    }
+    else {
+        res.send("put valid id number for deleting a user")
+    }
 }

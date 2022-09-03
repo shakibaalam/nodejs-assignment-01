@@ -7,9 +7,15 @@ router.route('/')
     .get(userController.getAllUsers)
     .post(userController.postAUser)
 
-router.route('/:id')
+router.route('/random')
     .get(userController.getAUser)
+
+router.route('/:id')
     .patch(userController.updateAUser)
     .delete(userController.deleteAUser)
+    
+router.route('/bulk-update/')
+    .patch(userController.updateMultiUser)
+
 
 module.exports = router    
